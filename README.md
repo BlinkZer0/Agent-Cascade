@@ -52,7 +52,9 @@ This compiles `src/server.ts` into `dist/server.js`, which is the entry point yo
 
 ## Self‑Ask / Reflection (Same‑Model Sub‑Calls)
 
-Yes — you can point this tool at the very same local model the client is using and have it “ask itself.” Nothing special is required on the server side: `agent-cascade` is a thin proxy to your `/chat/completions` endpoint. To keep this safe and predictable, make the reflection a separate, budgeted sub‑call with depth caps and short outputs that you enforce in your orchestrator/agent logic.
+![Yo dawg I heard you like LLMs](./a6t3o9.jpg)
+
+Yes — you can point this tool at the very same local model the client is using and have it "ask itself." Nothing special is required on the server side: `agent-cascade` is a thin proxy to your `/chat/completions` endpoint. To keep this safe and predictable, make the reflection a separate, budgeted sub‑call with depth caps and short outputs that you enforce in your orchestrator/agent logic.
 
 - Use small budgets: set `max_tokens` to a low value (e.g., 64–256) and a short `timeout_ms`.
 - Keep it concise: pass a `system` prompt that requires terse outputs.
