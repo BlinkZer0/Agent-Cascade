@@ -16,6 +16,8 @@ Autonomous "continue working" loops are **not** part of this package. The earlie
 | `LM_BASE_URL`   | `http://10.5.0.2:11434/v1` | Base URL for the local LM Studio/Ollama-compatible API. |
 | `DEFAULT_MODEL` | `qwen2.5-coder`            | Model used when the caller does not supply one.         |
 
+**Note**: By default, no token limit is imposed on responses. If you need to limit response length, specify `max_tokens` when calling the tool.
+
 ## Installation & build
 ```bash
 cd tools/agent-cascade
