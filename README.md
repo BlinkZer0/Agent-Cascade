@@ -34,12 +34,13 @@ This compiles `src/server.ts` into `dist/server.js`, which is the entry point yo
   "mcpServers": {
     "agent-cascade": {
       "command": "node",
-      "args": ["\\agent-cascade\\dist\\server.js"],
+      "args": ["./dist/server.js"],
       "env": {
         "LM_BASE_URL": "http://10.5.0.2:11434/v1",
         "DEFAULT_MODEL": "qwen2.5-coder"
       },
-      "disabled": false
+      "disabled": false,
+      "disabledTools": []
     }
   }
 }
@@ -47,13 +48,13 @@ This compiles `src/server.ts` into `dist/server.js`, which is the entry point yo
 
 > Tip: For a portable setup, build first and then point to the absolute path of your locally built `dist/server.js`. Some environments do not expand `${workspaceFolder}`.
 
-## Verifying the server
-Inside a Cascade chat tab you can sanity-check the setup:
-- Run `tools.list` - you should see `local_chat` exposed by `agent-cascade`.
-- Call the tool: invoke `local_chat` with `{ "prompt": "Say hello in one short sentence." }` to confirm a response from your local model.
-- Optional: call the method `local.chat` with the same payload if your client supports MCP method calls.
+## Demo
 
-If requests fail, confirm that your LM endpoint is reachable at `LM_BASE_URL` and that the selected `DEFAULT_MODEL` exists.
+The screenshot below shows `agent-cascade` in action, successfully routing a chat completion request through Windsurf/Cascade to a local language model:
+
+![Agent Cascade Demo](./Screenshot%202025-09-21%20215159.png)
+
+*Example: The `local_chat` tool responding with "Hello! I'm here and ready to help you with any coding questions or tasks you might have."*
 
 ## Troubleshooting
 - **Timeouts or empty responses** - increase `timeout_ms` when invoking the tool or ensure the model is loaded in LM Studio.
