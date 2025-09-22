@@ -50,6 +50,36 @@ This compiles `src/server.ts` into `dist/server.js`, which is the entry point yo
 
 > Tip: For a portable setup, build first and then point to the absolute path of your locally built `dist/server.js`. Some environments do not expand `${workspaceFolder}`.
 
+## Self‑Ask / Reflection (Same‑Model Sub‑Calls)
+
+Yes — you can point this tool at the very same local model the client is using and have it “ask itself.” Nothing special is required on the server side: `agent-cascade` is a thin proxy to your `/chat/completions` endpoint. To keep this safe and predictable, make the reflection a separate, budgeted sub‑call with depth caps and short outputs that you enforce in your orchestrator/agent logic.
+
+- Use small budgets: set `max_tokens` to a low value (e.g., 64–256) and a short `timeout_ms`.
+- Keep it concise: pass a `system` prompt that requires terse outputs.
+- Control recursion in the caller: enforce a max “reflection depth” in your agent; the server does not loop on its own.
+
+Example sub‑call via MCP tools/call:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "local_chat",
+    "arguments": {
+      "system": "You are a terse reviewer. Reply in <=5 short bullets.",
+      "prompt": "Reflect on the draft plan; list obvious risks only.",
+      "max_tokens": 128,
+      "temperature": 0.1,
+      "timeout_ms": 10000
+    }
+  }
+}
+```
+
+This snippet is drop‑in and safe: it’s just another call to your local model with a tight budget and constraints. If you’re performing multi‑step workflows, track your own depth/budget in the caller and stop when limits are hit.
+
 ## Demo
 
 The screenshot below shows `agent-cascade` in action, successfully routing a chat completion request through Windsurf/Cascade to a local language model:
